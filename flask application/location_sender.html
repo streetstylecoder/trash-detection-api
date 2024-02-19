@@ -1,0 +1,45 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Location Sender</title>
+    <script>
+        function sendLocation() {
+            if ("geolocation" in navigator) {
+                navigator.geolocation.getCurrentPosition(function(position) {
+                    const latitude = position.coords.latitude;
+                    const longitude = position.coords.longitude;
+
+                    // Send this information to the Flask backend
+                    fetch('/start', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify({ latitude: latitude, longitude: longitude }),
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        console.log('Success:', data);
+                        document.getElementById("status").innerText = "Location sent successfully.";
+                    })
+                    .catch((error) => {
+                        console.error('Error:', error);
+                        document.getElementById("status").innerText = "Error sending location.";
+                    });
+                });
+            } else {
+                console.log("Geolocation is not available in your browser.");
+                document.getElementById("status").innerText = "Geolocation is not available in your browser.";
+            }
+        }
+    </script>
+</head>
+<body>
+    <h1>Send Location to Flask</h1>
+    <button onclick="sendLocation()">Send Location</button>
+    <p id="status"></p>
+</body>
+</html>
