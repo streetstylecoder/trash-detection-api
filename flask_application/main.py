@@ -6,7 +6,7 @@ import numpy as np
 app = Flask(__name__)
 
 # Load your trained model
-model = load_model('path_to_your_model.h5')
+model = load_model('trash.h5')
 
 @app.route('/predict', methods=['POST'])
 def predict():
